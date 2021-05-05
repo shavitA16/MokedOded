@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LocationActivity"
+    android:background="#4CAF50">
+
+
+    <Button
+        android:id="@+id/south3Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="מבואה 3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/south2Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="מבואה 2"
+        app:layout_constraintBottom_toTopOf="@+id/south1Button"
+        app:layout_constraintEnd_toStartOf="@+id/south1Button"
+        app:layout_constraintStart_toEndOf="@+id/south3Button"
+        app:layout_constraintTop_toBottomOf="@+id/south3Button" />
+
+    <Button
+        android:id="@+id/south1Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="מבואה 1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/southGardenButton" />
+
+    <Button
+        android:id="@+id/north1Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="מבואה 1"
+        app:layout_constraintBottom_toTopOf="@+id/northGardenButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/north2Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="מבואה 2"
+        app:layout_constraintBottom_toTopOf="@+id/north3Button"
+        app:layout_constraintEnd_toStartOf="@+id/north1Button"
+        app:layout_constraintStart_toEndOf="@+id/north3Button"
+        app:layout_constraintTop_toBottomOf="@+id/north1Button" />
+
+    <Button
+        android:id="@+id/north3Button"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="מבואה 3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/southTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:shadowColor="#090909"
+        android:shadowRadius="15"
+        android:text="דרום"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/south2Button"
+        app:layout_constraintTop_toBottomOf="@+id/south3Button" />
+
+    <TextView
+        android:id="@+id/northTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:shadowColor="#0B0A0A"
+        android:shadowRadius="15"
+        android:text="צפון"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/north3Button"
+        app:layout_constraintEnd_toStartOf="@+id/north2Button" />
+
+    <Button
+        android:id="@+id/mainGardenButton"
+        android:layout_width="115dp"
+        android:layout_height="200sp"
+        android:layout_marginStart="8dp"
+        android:text="חצר מרכזית"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/southGardenButton"
+        android:layout_width="105dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="חצר דרומית"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/northGardenButton"
+        android:layout_width="105dp"
+        android:layout_height="175dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="חצר צפונית"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/entranceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:defaultFocusHighlightEnabled="false"
+        android:shadowColor="#050505"
+        android:shadowRadius="10"
+        android:text="כניסה"
+        android:textColor="#F44336"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/north1Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/south1Button" />
+</androidx.constraintlayout.widget.ConstraintLayout>

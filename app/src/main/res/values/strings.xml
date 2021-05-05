@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">המוקד</string>
+    <string-array name="issues_array">
+        <item>בחר בעיה</item>
+        <item>פח מלא</item>
+        <item>אין פח</item>
+        <item>אין שקית בפח</item>
+        <item>אין נייר בשירותים</item>
+        <item>אין סבון בשירותים</item>
+        <item>שירותים מוצפים</item>
+        <item>שירותים מלוכלכים</item>
+        <item>שירותים סתומים</item>
+        <item>אחר (נא לפרט בתיאור)</item>
+    </string-array>
+</resources>
