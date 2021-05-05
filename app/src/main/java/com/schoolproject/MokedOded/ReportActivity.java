@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class ReportActivity extends AppCompatActivity {
 
     ImageView cameraImageView;
@@ -34,6 +36,8 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         cameraImageView = findViewById(R.id.cameraImageView);
         cameraImageView.setOnClickListener(new View.OnClickListener() {
