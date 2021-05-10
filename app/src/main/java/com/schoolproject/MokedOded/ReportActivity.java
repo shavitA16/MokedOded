@@ -18,26 +18,32 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
 
+    FirebaseDatabase database;
+    DatabaseReference myRef;
     ImageView cameraImageView;
     Button sendButton;
     Button locationsButton;
     final int REQUEST_IMAGE_CAPTURE = 50;
     final int LOCATION_REQUEST_CODE = 69; // LMAO
-    String selectedIssue;
-    int issue;
-    String description;
-    Bitmap pic;
+//    String selectedIssue;
+//    int issue;
+//    String description;
+//    Bitmap pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         cameraImageView = findViewById(R.id.cameraImageView);
         cameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +73,7 @@ public class ReportActivity extends AppCompatActivity {
                 R.array.issues_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         issuesSpinner.setAdapter(adapter);
-        selectedIssue = issuesSpinner.getSelectedItem().toString();
-
-
+//        selectedIssue = issuesSpinner.getSelectedItem().toString();
 
         final EditText notesEditText = findViewById(R.id.notesEditText);
 
@@ -77,8 +81,16 @@ public class ReportActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                description = notesEditText.getText().toString();
-                issue = issuesSpinner.getSelectedItemPosition();
+                Singleton s = Singleton.getInstance();
+                s.description = notesEditText.getText().toString();
+                s.issue = issuesSpinner.getSelectedItemPosition();
+                s.date = Calendar.getInstance().getTime();
+
+                database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
+                myRef = database.getReference("issues");
+
+                myRef.child(s.date.toString()).setValue(s);
+
                 finish();
             }
         });
@@ -91,7 +103,6 @@ public class ReportActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             cameraImageView.setImageBitmap(imageBitmap);
-            pic = imageBitmap;
         } else if (requestCode == LOCATION_REQUEST_CODE) {
             checkLocation();
         }
