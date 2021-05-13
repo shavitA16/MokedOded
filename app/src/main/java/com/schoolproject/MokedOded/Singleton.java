@@ -12,14 +12,14 @@ class Singleton {
     public int issue;
     public String description;
     public Date date;
-    public String picURL;
+    public String imgURL;
 
     private Singleton(){
         location = 0;
         issue = 0;
         description = "";
         date = null;
-        picURL = "";
+        imgURL = "";
     }
 
     public static Singleton getInstance(){

@@ -1,15 +1,23 @@
 package com.schoolproject.MokedOded;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,27 +25,44 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
 
+    private static final String TAG ="" ;
+    private static final int CAMERA_REQUEST_CODE = 16;
     FirebaseDatabase database;
+    FirebaseStorage storage;
     DatabaseReference myRef;
+    StorageReference storageRef;
+    StorageReference itemRef;
     ImageView cameraImageView;
     Button sendButton;
     Button locationsButton;
     final int REQUEST_IMAGE_CAPTURE = 50;
     final int LOCATION_REQUEST_CODE = 69; // LMAO
-//    String selectedIssue;
-//    int issue;
-//    String description;
-//    Bitmap pic;
+    private Uri imgURI;
+    private String currentPhotoPath;
+
+    private Uri newImageUri;
+    private File newImageFile;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +74,7 @@ public class ReportActivity extends AppCompatActivity {
         cameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                dispatchTakePictureIntent();
                 Intent openCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try {
                     startActivityForResult(openCamera, REQUEST_IMAGE_CAPTURE);
@@ -76,6 +102,7 @@ public class ReportActivity extends AppCompatActivity {
 //        selectedIssue = issuesSpinner.getSelectedItem().toString();
 
         final EditText notesEditText = findViewById(R.id.notesEditText);
+        Toast onSuccessToast = Toast.makeText(this, "הבעיה דווחה בהצלחה", Toast.LENGTH_SHORT);
 
         sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -86,12 +113,32 @@ public class ReportActivity extends AppCompatActivity {
                 s.issue = issuesSpinner.getSelectedItemPosition();
                 s.date = Calendar.getInstance().getTime();
 
-                database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
-                myRef = database.getReference("issues");
-
-                myRef.child(s.date.toString()).setValue(s);
-
-                finish();
+                String uid = String.valueOf(System.currentTimeMillis());
+                String imageNameWithExtantions = uid + ".jpg";
+                s.imgURL = imageNameWithExtantions;
+                storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com");
+                storageRef = storage.getReference("images");
+                itemRef = storageRef.child(imageNameWithExtantions);
+//                dispatchTakePictureIntent();
+//                if(imgURI!=null){
+//                    itemRef.putFile(imgURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
+//                            myRef = database.getReference("issues");
+//                            myRef.child(uid).setValue(s);
+//                            onSuccessToast.show();
+//                            finish();
+//                        }
+//                    });
+//                }
+                if (s.issue!=0 && s.location!=0) {
+                    database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
+                    myRef = database.getReference("issues");
+                    myRef.child(uid).setValue(s);
+                    onSuccessToast.show();
+                    finish();
+                }
             }
         });
     }
@@ -99,7 +146,40 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK /*&& currentPhotoPath != null*/) {
+//            String uid = String.valueOf(System.currentTimeMillis());
+//            String imageNameWithExtantions = uid + ".jpg";
+//            Singleton s = Singleton.getInstance();
+//            s.imgURL = imageNameWithExtantions;
+//            storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com");
+//                storageRef = storage.getReference("images");
+//                itemRef = storageRef.child(imageNameWithExtantions);
+//
+//            Toast onSuccessToast = Toast.makeText(this, "הבעיה דווחה בהצלחה", Toast.LENGTH_SHORT);
+//                if(imgURI!=null){
+//                    itemRef.putFile(imgURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
+//                            myRef = database.getReference("issues");
+//                            myRef.child(uid).setValue(s);
+//                            onSuccessToast.show();
+//                            finish();
+//                        }
+//                    });
+//                }
+
+//
+//            dispatchTakePictureIntent();
+//            File f = new File(currentPhotoPath);
+//            imgURI = Uri.fromFile(f);
+//            cameraImageView.setImageURI(imgURI);
+
+//            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//            Uri contentUri = Uri.fromFile(f);
+//            mediaScanIntent.setData(contentUri);
+//            this.sendBroadcast(mediaScanIntent);
+
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             cameraImageView.setImageBitmap(imageBitmap);
@@ -107,6 +187,74 @@ public class ReportActivity extends AppCompatActivity {
             checkLocation();
         }
 
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            newImageFile = null;
+            try {
+                newImageFile = createImageFile();
+            } catch (IOException ex) {
+                Log.e(TAG, "dispatchTakePictureIntent: Error occurred while creating the File", ex);
+
+            }
+            // Continue only if the File was successfully created
+            if (newImageFile != null) {
+                newImageUri = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        newImageFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, newImageUri);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+//    private void dispatchTakePictureIntent() {     nissim
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex) {
+//               Log.d("error", ex.toString());
+//            }
+//            // Continue only if the File was successfully created
+//            if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.schoolproject.MokedOded",
+//                        photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+//        }
+//    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        imgURI = Uri.fromFile(f);
+        cameraImageView.setImageURI(imgURI);
+        mediaScanIntent.setData(imgURI);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     public void onButtonShowPopupWindowClick(View view) {
