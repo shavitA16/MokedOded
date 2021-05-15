@@ -13,14 +13,23 @@ public class MainActivity extends AppCompatActivity {
 
     Button issuesButton;
     Button reportButton;
+    Button createUserButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Intent homeToReport = new Intent(this, ReportActivity.class);
         reportButton = findViewById(R.id.reportButton);
+        issuesButton = findViewById(R.id.issuesButton);
+        createUserButton = findViewById(R.id.createUserButton);
+
+//        issuesButton.setVisibility(View.INVISIBLE);
+//        issuesButton.setClickable(false);
+//        createUserButton.setVisibility(View.INVISIBLE);
+//        createUserButton.setClickable(false);
+
+        final Intent homeToReport = new Intent(this, ReportActivity.class);
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,11 +38,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final Intent homeToIssues = new Intent(this, IssuesActivity.class);
-        issuesButton = findViewById(R.id.issuesButton);
         issuesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(homeToIssues);
+            }
+        });
+
+        final Intent homeToCreateUser = new Intent(this, CreateUserActivity.class);
+        createUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(homeToCreateUser);
             }
         });
     }
