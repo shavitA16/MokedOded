@@ -40,17 +40,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/issueTypeTextView"
-            android:layout_toStartOf="@+id/issueImageView"            android:layout_toEndOf="@+id/statusButton"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/issueImageView"
+            android:layout_toEndOf="@+id/statusButton"
+            android:text="מיקום"
+            android:textDirection="rtl"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/issueDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/issueLocationTextView"
+            android:layout_toStartOf="@+id/issueImageView"
             android:layout_marginEnd="10dp"
             android:textDirection="rtl"
-            android:text="מיקום" />
+            android:text="00/00/0000" />
+
+        <TextView
+            android:id="@+id/issueUserEmailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusButton"
+            android:layout_alignStart="@+id/statusButton"
+            android:text="email@email.com"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/statusButton"
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:text="status"
-            android:textColor="#EA0C0C" />
+            android:textColor="#F44336" />
 
     </RelativeLayout>
 

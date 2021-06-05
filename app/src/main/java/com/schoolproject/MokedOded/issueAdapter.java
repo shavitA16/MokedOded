@@ -28,6 +28,8 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView issueImage;
         TextView issueTypeTextView;
         TextView issueLocationTextView;
+        TextView issueDateTextView;
+        TextView issueUserEmailTextView;
         Button statusButton;
 
         CustomAdapterItemView(final View itemView) {
@@ -35,6 +37,8 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             issueImage = itemView.findViewById(R.id.issueImageView);
             issueTypeTextView = itemView.findViewById(R.id.issueTypeTextView);
             issueLocationTextView = itemView.findViewById(R.id.issueLocationTextView);
+            issueDateTextView = itemView.findViewById(R.id.issueDateTextView);
+            issueUserEmailTextView = itemView.findViewById(R.id.issueUserEmailTextView);
             statusButton = itemView.findViewById(R.id.statusButton);
         }
 
@@ -121,6 +125,8 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         };
         ((CustomAdapterItemView) holder).issueLocationTextView.setText(location);
         ((CustomAdapterItemView) holder).statusButton.setText(currentItem.status);
+        ((CustomAdapterItemView) holder).issueDateTextView.setText(currentItem.date);
+        ((CustomAdapterItemView) holder).issueUserEmailTextView.setText(currentItem.userEmail);
     }
 
     @Override

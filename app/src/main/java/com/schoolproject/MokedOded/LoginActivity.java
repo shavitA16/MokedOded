@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login Activity";
     FirebaseDatabase database;
     DatabaseReference myRef;
-    private EditText usernameEditText;
+    private EditText EmailEditText;
     private EditText passwordEditText;
     private Button loginButton;
     private TextView invalidInputTextView;
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         updateUI(mAuth.getCurrentUser());
 
-        usernameEditText = findViewById(R.id.emailEditText);
+        EmailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.addUserButton);
         invalidInputTextView = findViewById(R.id.invalidInputTextView);
@@ -58,20 +58,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(){
-        String email = usernameEditText.getText().toString();
+        String email = EmailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             // email input is not valid
-            usernameEditText.setError("Please enter a valid email");
-            usernameEditText.requestFocus();
+            EmailEditText.setError("Please enter a valid email");
+            EmailEditText.requestFocus();
             return;
         }
         if (password.isEmpty()){
             passwordEditText.setError("Please enter a valid password");
             passwordEditText.requestFocus();
             return;
+        }if (password.length()<6){
+            passwordEditText.setError("password must be at least 6 characters");
+            passwordEditText.requestFocus();
+            return;
         }
+
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -81,11 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
+                    Toast.makeText(LoginActivity.this, "שלום "+ user.getEmail(),
+                            Toast.LENGTH_SHORT).show();
                     updateUI(user);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                    Toast.makeText(LoginActivity.this, "התחברות נכשלה",
                             Toast.LENGTH_SHORT).show();
                     updateUI(null);
                 }
@@ -103,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean InputIsValid(){
-        if (usernameEditText.getText().toString().length() < 1 || passwordEditText.getText().toString().length() < 1 ){
+        if (EmailEditText.getText().toString().length() < 1 || passwordEditText.getText().toString().length() < 1 ){
             invalidInputTextView.setText("נא למלא את כל השדות");
             return false;
         }

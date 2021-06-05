@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,8 @@ import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,6 +29,7 @@ public class IssuesActivity extends AppCompatActivity {
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,8 @@ public class IssuesActivity extends AppCompatActivity {
                     String date = child.child("date").getValue().toString();
                     String imgURL = child.child("imgURL").getValue().toString();
                     String status = child.child("status").getValue().toString();
-                    issuesList.add(new Issue(issue, location, description, date, imgURL, status));
+                    String userEmail = child.child("userEmail").getValue().toString();
+                    issuesList.add(new Issue(issue, location, description, date, imgURL, status, userEmail));
                 }
                 issueAdapter mIssueAdapter = new issueAdapter(issuesList);
                 RecyclerView recyclerView = findViewById(R.id.issuesRecyclerView);

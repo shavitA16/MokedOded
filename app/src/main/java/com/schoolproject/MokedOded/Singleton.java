@@ -11,17 +11,19 @@ class Singleton {
     public int location;
     public int issue;
     public String description;
-    public Date date;
+    public String date;
     public String imgURL;
     public String status;
+    public String userEmail;
 
     private Singleton(){
         location = 0;
         issue = 0;
         description = "";
-        date = null;
+        date = "";
         imgURL = "";
         status = "לא טופל";
+        userEmail = "";
     }
 
     public static Singleton getInstance(){

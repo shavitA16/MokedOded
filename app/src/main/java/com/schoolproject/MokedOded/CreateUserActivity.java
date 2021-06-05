@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,15 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
 
 public class CreateUserActivity extends AppCompatActivity {
     private static final String TAG = "Signup Activity";
 
-    private EditText newUsernameEditText;
+    private EditText newEmailEditText;
     private EditText newPasswordEditText;
     private Button addUserButton;
     private CheckBox adminCheckBox;
@@ -40,8 +37,8 @@ public class CreateUserActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         updateUI(mAuth.getCurrentUser());
 
-        newUsernameEditText = findViewById(R.id.emailEditText);
-        newPasswordEditText = findViewById(R.id.passwordEditText);
+        newEmailEditText = findViewById(R.id.newEmailEditText);
+        newPasswordEditText = findViewById(R.id.newPasswordEditText);
         addUserButton = findViewById(R.id.addUserButton);
         adminCheckBox = findViewById(R.id.adminCheckBox);
 
@@ -57,17 +54,22 @@ public class CreateUserActivity extends AppCompatActivity {
 
 
     private void createUser(){
-        String email = newUsernameEditText.getText().toString();
+        String email = newEmailEditText.getText().toString();
         String password = newPasswordEditText.getText().toString();
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             // email input is not valid
-            newUsernameEditText.setError("Please enter a valid email");
-            newUsernameEditText.requestFocus();
+            newEmailEditText.setError("Please enter a valid email");
+            newEmailEditText.requestFocus();
             return;
         }
         if (password.isEmpty()){
             newPasswordEditText.setError("Please enter a valid password");
+            newPasswordEditText.requestFocus();
+            return;
+        }
+        if (password.length()<6){
+            newPasswordEditText.setError("password must be at least 6 characters");
             newPasswordEditText.requestFocus();
             return;
         }

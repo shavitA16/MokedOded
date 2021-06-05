@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +53,7 @@ public class ReportActivity extends AppCompatActivity {
     DatabaseReference myRef;
     StorageReference storageRef;
     StorageReference itemRef;
+    private FirebaseAuth mAuth;
     ImageView cameraImageView;
     Button sendButton;
     Button locationsButton;
@@ -68,7 +71,7 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
+        mAuth = FirebaseAuth.getInstance();
 
         cameraImageView = findViewById(R.id.cameraImageView);
         cameraImageView.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +114,10 @@ public class ReportActivity extends AppCompatActivity {
                 Singleton s = Singleton.getInstance();
                 s.description = notesEditText.getText().toString();
                 s.issue = issuesSpinner.getSelectedItemPosition();
-                s.date = Calendar.getInstance().getTime();
+                Date date = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+                s.date = dateFormat.format(date);
+                s.userEmail = mAuth.getCurrentUser().getEmail();
 
                 String uid = String.valueOf(System.currentTimeMillis());
                 String imageNameWithExtantions = uid + ".jpg";
