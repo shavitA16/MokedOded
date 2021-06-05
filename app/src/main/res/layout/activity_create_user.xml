@@ -43,12 +43,12 @@
                 app:layout_constraintWidth_percent="0.7">
 
                 <EditText
-                    android:id="@+id/newUsernameEditText"
+                    android:id="@+id/emailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#808080"
                     android:gravity="center"
-                    android:hint="Username"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:padding="10dp"
                     android:textColor="#000000"
@@ -68,7 +68,7 @@
                 app:layout_constraintWidth_percent="0.7">
 
                 <EditText
-                    android:id="@+id/newPasswordEditText"
+                    android:id="@+id/passwordEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#808080"
@@ -123,16 +123,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
-
-    <TextView
-        android:id="@+id/errorTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="#F60808"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminCheckBox" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

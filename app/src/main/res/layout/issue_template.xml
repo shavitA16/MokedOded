@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:layoutDirection="ltr">
+
+        <ImageView
+            android:id="@+id/issueImageView"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="TODO"
+            android:maxWidth="96dp"
+            android:maxHeight="54dp"
+            android:src="@drawable/camera_icon" />
+
+        <TextView
+            android:id="@+id/issueTypeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/issueImageView"
+            android:layout_toEndOf="@+id/statusButton"
+            android:text="בעיה"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textDirection="rtl"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/issueLocationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/issueTypeTextView"
+            android:layout_toStartOf="@+id/issueImageView"            android:layout_toEndOf="@+id/statusButton"
+            android:layout_marginEnd="10dp"
+            android:textDirection="rtl"
+            android:text="מיקום" />
+
+        <Button
+            android:id="@+id/statusButton"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:text="status"
+            android:textColor="#EA0C0C" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

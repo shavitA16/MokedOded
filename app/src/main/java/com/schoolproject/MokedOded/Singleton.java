@@ -13,6 +13,7 @@ class Singleton {
     public String description;
     public Date date;
     public String imgURL;
+    public String status;
 
     private Singleton(){
         location = 0;
@@ -20,6 +21,7 @@ class Singleton {
         description = "";
         date = null;
         imgURL = "";
+        status = "לא טופל";
     }
 
     public static Singleton getInstance(){

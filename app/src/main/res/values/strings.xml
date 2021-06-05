@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">המוקד</string>
+    <string name="admin_uid">JWDx8bJ6duNnSVADa3peKU847U43</string>
     <string-array name="issues_array">
         <item>בחר בעיה</item>
         <item>פח מלא</item>
