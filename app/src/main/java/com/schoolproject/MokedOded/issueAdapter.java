@@ -2,6 +2,7 @@ package com.schoolproject.MokedOded;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<Issue> issuesList = new ArrayList<>();
+    private DatabaseReference mDatabaseRef;
 
     public issueAdapter(ArrayList<Issue> issuesList) { // you can pass other parameters in constructor
 
@@ -125,6 +129,13 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         };
         ((CustomAdapterItemView) holder).issueLocationTextView.setText(location);
         ((CustomAdapterItemView) holder).statusButton.setText(currentItem.status);
+        if (currentItem.status.equals("לא טופל")){
+            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.parseColor("#F44336"));
+        }
+        else {
+            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.parseColor("#FF0FDF17"));
+        }
+
         ((CustomAdapterItemView) holder).issueDateTextView.setText(currentItem.date);
         ((CustomAdapterItemView) holder).issueUserEmailTextView.setText(currentItem.userEmail);
     }

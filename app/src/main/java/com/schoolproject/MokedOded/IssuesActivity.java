@@ -29,6 +29,7 @@ public class IssuesActivity extends AppCompatActivity {
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
+    Button statusButton;
 
 
     @Override
@@ -36,6 +37,7 @@ public class IssuesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issues);
 
+        statusButton = findViewById(R.id.statusButton);
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("issues");
 
@@ -67,11 +69,11 @@ public class IssuesActivity extends AppCompatActivity {
             }
 
 
-
         };
 
         mDatabaseRef.addValueEventListener(getData);
         mDatabaseRef.addListenerForSingleValueEvent(getData);
+
 
     }
 }

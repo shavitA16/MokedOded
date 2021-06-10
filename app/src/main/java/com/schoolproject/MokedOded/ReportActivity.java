@@ -115,16 +115,16 @@ public class ReportActivity extends AppCompatActivity {
                 s.description = notesEditText.getText().toString();
                 s.issue = issuesSpinner.getSelectedItemPosition();
                 Date date = Calendar.getInstance().getTime();
-                DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
                 s.date = dateFormat.format(date);
                 s.userEmail = mAuth.getCurrentUser().getEmail();
 
                 String uid = String.valueOf(System.currentTimeMillis());
-                String imageNameWithExtantions = uid + ".jpg";
-                s.imgURL = imageNameWithExtantions;
-                storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com");
+                String imageNameWithExtension = uid + ".jpg";
+                s.imgURL = imageNameWithExtension;
+                storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com/");
                 storageRef = storage.getReference("images");
-                itemRef = storageRef.child(imageNameWithExtantions);
+                itemRef = storageRef.child(imageNameWithExtension);
 //                dispatchTakePictureIntent();
 //                if(imgURI!=null){
 //                    itemRef.putFile(imgURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
