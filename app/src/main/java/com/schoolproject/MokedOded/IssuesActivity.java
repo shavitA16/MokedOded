@@ -70,7 +70,7 @@ public class IssuesActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Toast.makeText(IssuesActivity.this, "something fucked up along the way, idk ask shavit to fix this", Toast.LENGTH_SHORT).show();
+                Toast.makeText(IssuesActivity.this, "something is broken somewhere", Toast.LENGTH_SHORT).show();
                 finish();
             }
 

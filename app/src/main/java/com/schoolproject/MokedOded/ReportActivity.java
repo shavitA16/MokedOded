@@ -102,7 +102,6 @@ public class ReportActivity extends AppCompatActivity {
                 R.array.issues_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         issuesSpinner.setAdapter(adapter);
-//        selectedIssue = issuesSpinner.getSelectedItem().toString();
 
         final EditText notesEditText = findViewById(R.id.notesEditText);
         Toast onSuccessToast = Toast.makeText(this, "הבעיה דווחה בהצלחה", Toast.LENGTH_SHORT);
@@ -152,40 +151,7 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK /*&& currentPhotoPath != null*/) {
-//            String uid = String.valueOf(System.currentTimeMillis());
-//            String imageNameWithExtantions = uid + ".jpg";
-//            Singleton s = Singleton.getInstance();
-//            s.imgURL = imageNameWithExtantions;
-//            storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com");
-//                storageRef = storage.getReference("images");
-//                itemRef = storageRef.child(imageNameWithExtantions);
-//
-//            Toast onSuccessToast = Toast.makeText(this, "הבעיה דווחה בהצלחה", Toast.LENGTH_SHORT);
-//                if(imgURI!=null){
-//                    itemRef.putFile(imgURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
-//                            myRef = database.getReference("issues");
-//                            myRef.child(uid).setValue(s);
-//                            onSuccessToast.show();
-//                            finish();
-//                        }
-//                    });
-//                }
-
-//
-//            dispatchTakePictureIntent();
-//            File f = new File(currentPhotoPath);
-//            imgURI = Uri.fromFile(f);
-//            cameraImageView.setImageURI(imgURI);
-
-//            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//            Uri contentUri = Uri.fromFile(f);
-//            mediaScanIntent.setData(contentUri);
-//            this.sendBroadcast(mediaScanIntent);
-
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             cameraImageView.setImageBitmap(imageBitmap);

@@ -109,11 +109,4 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean InputIsValid(){
-        if (EmailEditText.getText().toString().length() < 1 || passwordEditText.getText().toString().length() < 1 ){
-            invalidInputTextView.setText("נא למלא את כל השדות");
-            return false;
-        }
-        return true;
-    }
 }
