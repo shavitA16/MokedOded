@@ -1,5 +1,6 @@
 package com.schoolproject.MokedOded;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -27,10 +28,14 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,6 +66,7 @@ public class ReportActivity extends AppCompatActivity {
     final int LOCATION_REQUEST_CODE = 69; // LMAO
     private Uri imgURI;
     private String currentPhotoPath;
+    String uid;
 
     private Uri newImageUri;
     private File newImageFile;
@@ -72,18 +78,24 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com/");
+        storageRef = storage.getReference("images");
+        database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
+        myRef = database.getReference("issues");
+        uid = String.valueOf(System.currentTimeMillis());
+        Intent loading = new Intent(this, LoadingActivity.class);
 
         cameraImageView = findViewById(R.id.cameraImageView);
         cameraImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                dispatchTakePictureIntent();
-                Intent openCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(openCamera, REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-
-                }
+                dispatchTakePictureIntent();
+//                Intent openCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                try {
+//                    startActivityForResult(openCamera, REQUEST_IMAGE_CAPTURE);
+//                } catch (ActivityNotFoundException e) {
+//
+//                }
             }
         });
 
@@ -105,6 +117,7 @@ public class ReportActivity extends AppCompatActivity {
 
         final EditText notesEditText = findViewById(R.id.notesEditText);
         Toast onSuccessToast = Toast.makeText(this, "הבעיה דווחה בהצלחה", Toast.LENGTH_SHORT);
+        Toast onFailToast = Toast.makeText(this, "נא למלא את כל השדות", Toast.LENGTH_SHORT);
 
         sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -118,12 +131,6 @@ public class ReportActivity extends AppCompatActivity {
                 s.date = dateFormat.format(date);
                 s.userEmail = mAuth.getCurrentUser().getEmail();
 
-                String uid = String.valueOf(System.currentTimeMillis());
-                String imageNameWithExtension = uid + ".jpg";
-                s.imgURL = imageNameWithExtension;
-                storage = FirebaseStorage.getInstance("gs://the-moked-81b25.appspot.com/");
-                storageRef = storage.getReference("images");
-                itemRef = storageRef.child(imageNameWithExtension);
 //                dispatchTakePictureIntent();
 //                if(imgURI!=null){
 //                    itemRef.putFile(imgURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -138,11 +145,35 @@ public class ReportActivity extends AppCompatActivity {
 //                    });
 //                }
                 if (s.issue!=0 && s.location!=0) {
-                    database = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/");
-                    myRef = database.getReference("issues");
-                    myRef.child(uid).setValue(s);
-                    onSuccessToast.show();
-                    finish();
+                    startActivity(loading);
+                    final StorageReference filepath = storageRef.child(newImageUri.getLastPathSegment());
+
+                    filepath.putFile(newImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Log.d(TAG, "onSuccess: Picture successfully uploaded");
+
+                            taskSnapshot.getStorage().getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "onFailure: ", e);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String generatedFilePath = uri.toString();
+                                    Singleton s = Singleton.getInstance();
+                                    s.imgURL = generatedFilePath;
+                                    myRef.child(uid).setValue(s);
+                                    onSuccessToast.show();
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+                    onFailToast.show();
                 }
             }
         });
@@ -151,10 +182,23 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            cameraImageView.setImageBitmap(imageBitmap);
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            cameraImageView.setImageBitmap(imageBitmap);
+//            Singleton s = Singleton.getInstance();
+//            Glide.with(ReportActivity.this)
+//                    .asBitmap()
+//                    .load(s.imgURL)
+//                    .into(cameraImageView);
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), newImageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            cameraImageView.setImageBitmap(bitmap);
+
         } else if (requestCode == LOCATION_REQUEST_CODE) {
             checkLocation();
         }
@@ -162,7 +206,7 @@ public class ReportActivity extends AppCompatActivity {
     }
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = Calendar.getInstance().getTime().getTime() + "";
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(

@@ -21,14 +21,15 @@ import java.util.ArrayList;
 public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ArrayList<Issue> issuesList = new ArrayList<>();
+    private Context context;
     private DatabaseReference mDatabaseRef;
 
-    public issueAdapter(ArrayList<Issue> issuesList) { // you can pass other parameters in constructor
-
+    public issueAdapter(ArrayList<Issue> issuesList, Context context) { // you can pass other parameters in constructor
+        this.context = context;
         this.issuesList = issuesList;
     }
 
-    private class CustomAdapterItemView extends RecyclerView.ViewHolder {
+    class CustomAdapterItemView extends RecyclerView.ViewHolder {
         ImageView issueImage;
         TextView issueTypeTextView;
         TextView issueLocationTextView;
@@ -62,7 +63,10 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         Issue currentItem = issuesList.get(position);
 
-        Glide.with(((CustomAdapterItemView) holder).issueImage).load(currentItem.imgURL).into((ImageView) holder.itemView.findViewById(R.id.issueImageView));
+        Glide.with(context)
+                .asBitmap()
+                .load(currentItem.imgURL)
+                .into(((CustomAdapterItemView) holder).issueImage);
         String issue;
         switch (currentItem.issue){
 

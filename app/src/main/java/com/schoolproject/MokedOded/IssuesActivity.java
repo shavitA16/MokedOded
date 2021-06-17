@@ -61,7 +61,7 @@ public class IssuesActivity extends AppCompatActivity {
                     String userEmail = child.child("userEmail").getValue().toString();
                     issuesList.add(new Issue(issue, location, description, date, imgURL, status, userEmail));
                 }
-                issueAdapter mIssueAdapter = new issueAdapter(issuesList);
+                issueAdapter mIssueAdapter = new issueAdapter(issuesList, IssuesActivity.this);
                 RecyclerView recyclerView = findViewById(R.id.issuesRecyclerView);
                 recyclerView.setAdapter(mIssueAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(IssuesActivity.this));
