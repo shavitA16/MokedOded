@@ -2,11 +2,17 @@ package com.schoolproject.MokedOded;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar myToolbar = findViewById(R.id.toolbarLog);
+        setSupportActionBar(myToolbar);
+
         mAuth = FirebaseAuth.getInstance();
         updateUI(mAuth.getCurrentUser());
 
@@ -109,4 +118,25 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menuLogin:
+                Toast.makeText(this, "אתה כבר נמצא בדף ההתחברות", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menuRegister:
+                Intent logToReg = new Intent(this, RegisterActivity.class);
+                startActivity(logToReg);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
