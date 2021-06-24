@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +25,10 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
     private DatabaseReference mDatabaseRef;
 
-    public issueAdapter(ArrayList<Issue> issuesList, Context context) { // you can pass other parameters in constructor
+    public issueAdapter(ArrayList<Issue> issuesList, Context context, DatabaseReference mDatabaseRef) { // you can pass other parameters in constructor
         this.context = context;
         this.issuesList = issuesList;
+        this.mDatabaseRef = mDatabaseRef;
     }
 
     class CustomAdapterItemView extends RecyclerView.ViewHolder {
@@ -45,6 +47,24 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             issueDateTextView = itemView.findViewById(R.id.issueDateTextView);
             issueUserEmailTextView = itemView.findViewById(R.id.issueUserEmailTextView);
             statusButton = itemView.findViewById(R.id.statusButton);
+            statusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Issue currentItem = issuesList.get(getPosition());
+                    if (statusButton.getText().equals("טופל")){
+                        statusButton.setTextColor(Color.RED);
+                        statusButton.setText("לא טופל");
+                        currentItem.status = "לא טופל";
+                        mDatabaseRef.child(currentItem.path).child("status").setValue("לא טופל");
+                    }
+                    else if(statusButton.getText().equals("לא טופל")){
+                        statusButton.setTextColor(Color.GREEN);
+                        statusButton.setText("טופל");
+                        currentItem.status = "טופל";
+                        mDatabaseRef.child(currentItem.path).child("status").setValue("טופל");
+                    }
+                }
+            });
         }
 
         void bind(int position) {
@@ -134,10 +154,10 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ((CustomAdapterItemView) holder).issueLocationTextView.setText(location);
         ((CustomAdapterItemView) holder).statusButton.setText(currentItem.status);
         if (currentItem.status.equals("לא טופל")){
-            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.parseColor("#F44336"));
+            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.RED);
         }
         else {
-            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.parseColor("#FF0FDF17"));
+            ((CustomAdapterItemView) holder).statusButton.setTextColor(Color.GREEN);
         }
 
         ((CustomAdapterItemView) holder).issueDateTextView.setText(currentItem.date);
@@ -151,5 +171,6 @@ public class issueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // Add your other methods here
 }
+
 
 

@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,27 +33,34 @@ public class IssuesActivity extends AppCompatActivity {
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
-    Button statusButton;
-
+    Switch statusFilterSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issues);
 
+
+
         Intent loading = new Intent(this, LoadingActivity.class);
         startActivity(loading);
 
-        statusButton = findViewById(R.id.statusButton);
+        ArrayList<Issue> issuesList = new ArrayList<Issue>();
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mDatabaseRef = FirebaseDatabase.getInstance("https://the-moked-81b25-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("issues");
+        RecyclerView recyclerView = findViewById(R.id.issuesRecyclerView);
+        statusFilterSwitch = findViewById(R.id.statusFilterSwitch);
 
         ValueEventListener getData = new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                ArrayList<Issue> issuesList = new ArrayList<Issue>();
+                issuesList.clear();
                 for (DataSnapshot child: snapshot.getChildren()){
+                    if (child.getKey().equals("cheat")){
+                        continue;
+                    }
+                    String path = child.getKey();
                     int location =  Integer.parseInt(child.child("location").getValue().toString());
                     int issue = Integer.parseInt(child.child("issue").getValue().toString());
                     String description = child.child("description").getValue().toString();
@@ -59,10 +68,16 @@ public class IssuesActivity extends AppCompatActivity {
                     String imgURL = child.child("imgURL").getValue().toString();
                     String status = child.child("status").getValue().toString();
                     String userEmail = child.child("userEmail").getValue().toString();
-                    issuesList.add(new Issue(issue, location, description, date, imgURL, status, userEmail));
+                    if (statusFilterSwitch.isChecked()){
+                        if (status.equals("לא טופל")){
+                            issuesList.add(new Issue(path, issue, location, description, date, imgURL, status, userEmail));
+                        }
+                    }
+                    else {
+                        issuesList.add(new Issue(path, issue, location, description, date, imgURL, status, userEmail));
+                    }
                 }
-                issueAdapter mIssueAdapter = new issueAdapter(issuesList, IssuesActivity.this);
-                RecyclerView recyclerView = findViewById(R.id.issuesRecyclerView);
+                issueAdapter mIssueAdapter = new issueAdapter(issuesList, IssuesActivity.this, mDatabaseRef);
                 recyclerView.setAdapter(mIssueAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(IssuesActivity.this));
                 recyclerView.setHasFixedSize(true);
@@ -73,16 +88,18 @@ public class IssuesActivity extends AppCompatActivity {
                 Toast.makeText(IssuesActivity.this, "something is broken somewhere", Toast.LENGTH_SHORT).show();
                 finish();
             }
-
-
         };
+
 
 
         mDatabaseRef.addValueEventListener(getData);
         mDatabaseRef.addListenerForSingleValueEvent(getData);
 
-
+        statusFilterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mDatabaseRef.child("cheat").child("description").setValue(String.valueOf(System.currentTimeMillis()));
+            }
+        });
     }
-
-
 }

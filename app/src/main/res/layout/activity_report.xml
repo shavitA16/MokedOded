@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A9E8E2"
     tools:context=".ReportActivity">
 
     <ImageView
@@ -33,11 +34,12 @@
     <Button
         android:id="@+id/locationsButton"
         android:layout_width="300dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_marginTop="40dp"
+        android:background="#58CD5D"
         android:text="בחר מיקום"
         android:textAlignment="textStart"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraImageView" />
@@ -47,6 +49,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
+        android:background="#58CD5D"
         android:text="דווח/י"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -60,7 +63,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
-        android:background="#B08BC34A"
+        android:background="#58CD5D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationsButton" />
